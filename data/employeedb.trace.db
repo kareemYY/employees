@@ -1,0 +1,6 @@
+2026-04-24 17:16:20.167486+03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]seletct * from employee"; expected "SAVEPOINT, SCRIPT, SHUTDOWN"; SQL statement:
+seletct * from employee [42001-240]
+2026-04-24 17:16:33.443990+03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]seletct * from employee"; expected "SAVEPOINT, SCRIPT, SHUTDOWN"; SQL statement:
+seletct * from employee [42001-240]
