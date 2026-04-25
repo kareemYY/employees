@@ -42,6 +42,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(configurer ->
                 configurer
+                        .requestMatchers(HttpMethod.GET,"/h2-console/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/h2-console/**").permitAll()
                         .requestMatchers("/docs/**","/swagger-ui/**","/v3/api-docs/**","/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/employees").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.GET,"/api/employees/**").hasRole("EMPLOYEE")
@@ -55,8 +57,15 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable());
 
+        http.exceptionHandling(exceptionHandling -> exceptionHandling.
+                authenticationEntryPoint(authenticationEntryPoint()));
+
         http.exceptionHandling(exception ->
          exception.authenticationEntryPoint(authenticationEntryPoint()));
+
+        http.headers(headers ->
+                headers.frameOptions(frameOptions -> frameOptions.disable()));
+
         return http.build();
     }
 
@@ -64,8 +73,10 @@ public class SecurityConfig {
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint(){
         return (request, response, authException) ->{
+            //send 401 unauthorized status without triggering a basic auth
                 response.setStatus(HttpStatus.UNAUTHORIZED.value()) ;
                 response.setContentType("application/json");
+            // removes the www-authenticate header to prevent browser popup
                 response.setHeader("WWW-Authenticate","");
                 response.getWriter().write("{\"error\":\"Unauthorized access\"}");
         };
