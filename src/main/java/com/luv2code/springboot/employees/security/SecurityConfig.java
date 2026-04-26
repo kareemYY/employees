@@ -7,36 +7,29 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class SecurityConfig {
 
 
     @Bean
-    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
-        UserDetails kareem = User.builder()
-                .username("kareem")
-                .password("{noop}123")
-                .roles("EMPLOYEE")
-                .build();
-        UserDetails aser = User.builder()
-                .username("aser")
-                .password("{noop}123")
-                .roles("EMPLOYEE","MANAGER")
-                .build();
-        UserDetails sara = User.builder()
-                .username("sara")
-                .password("{noop}123")
-                .roles("EMPLOYEE","MANAGER","ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(kareem, aser, sara);
-    }
+    public UserDetailsManager userDetailsManager(DataSource dataSource) {
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
 
+        jdbcUserDetailsManager.setUsersByUsernameQuery("select user_id ,password ,active from system_users where user_id=?");
+
+
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("select user_id ,role from roles where user_id=?");
+
+
+        return jdbcUserDetailsManager;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
