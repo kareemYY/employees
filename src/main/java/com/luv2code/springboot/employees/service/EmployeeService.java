@@ -12,4 +12,5 @@ public interface EmployeeService {
      EmployeeDto updateEmployee(long id,EmployeeDto employee);
      void deleteEmployee(long  id);
     EmployeeDto createEmployee(EmployeeDto employee);
+    boolean existsEmployeeByEmail(String email);
 }

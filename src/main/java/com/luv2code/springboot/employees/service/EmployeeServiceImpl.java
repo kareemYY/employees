@@ -40,9 +40,13 @@ public class EmployeeServiceImpl  implements EmployeeService {
     public EmployeeDto updateEmployee(long id,EmployeeDto employeeDto) {
       Employee employee=employeeDao.findById(id).
               orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id " + id));
-      employeeMapper.updateEmployee(employee,employeeDto);
-      employeeDao.save(employee);
-        return employeeMapper.mapEmployeeToEmployeeDto(employee);
+
+      if(employeeDto.getEmail().equalsIgnoreCase(employee.getEmail())||!existsEmployeeByEmail(employeeDto.getEmail())){
+          employeeMapper.updateEmployee(employee,employeeDto);
+          employeeDao.save(employee);
+          return employeeMapper.mapEmployeeToEmployeeDto(employee);
+      }
+      throw new EmployeeNotFoundException("Can't update employee with exist email");
     }
 
     @Transactional
@@ -61,5 +65,18 @@ public class EmployeeServiceImpl  implements EmployeeService {
         Employee newEmployee=employeeMapper.mapEmployeeDtoToEmployee(employee);
         employeeDao.save(newEmployee);
         return employeeMapper.mapEmployeeToEmployeeDto(newEmployee);
+    }
+
+    @Override
+    public boolean existsEmployeeByEmail(String email) {
+        return employeeDao.existsByEmail(email);
+    }
+
+    public EmployeeDto findEmployeeByEmail(String email) {
+        if(existsEmployeeByEmail(email)) {
+            return employeeMapper.mapEmployeeToEmployeeDto(employeeDao.findByEmail(email));
+        }
+        throw new EmployeeNotFoundException("Employee not found with email " + email);
+
     }
 }
