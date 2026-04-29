@@ -62,6 +62,9 @@ public class EmployeeServiceImpl  implements EmployeeService {
     @Override
     public EmployeeDto createEmployee(EmployeeDto employee) {
         employee.setId(0);
+        if (existsEmployeeByEmail(employee.getEmail())) {
+            throw new EmployeeNotFoundException("Can't create employee with exist email");
+        }
         Employee newEmployee=employeeMapper.mapEmployeeDtoToEmployee(employee);
         employeeDao.save(newEmployee);
         return employeeMapper.mapEmployeeToEmployeeDto(newEmployee);

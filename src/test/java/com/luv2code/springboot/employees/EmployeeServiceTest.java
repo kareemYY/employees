@@ -1,7 +1,6 @@
 package com.luv2code.springboot.employees;
 
 import com.luv2code.springboot.employees.Dto.EmployeeDto;
-import com.luv2code.springboot.employees.employeeDao.EmployeeDao;
 import com.luv2code.springboot.employees.entity.Employee;
 import com.luv2code.springboot.employees.exception.EmployeeNotFoundException;
 import com.luv2code.springboot.employees.service.EmployeeService;
@@ -56,12 +55,12 @@ public class EmployeeServiceTest {
 
 
     @Test
-    public void getAllEmployeesWith(){
-        List<Employee> employees = entityManager.createQuery("select e from Employee e",Employee.class).getResultList();
+    public void getAllEmployeesHappyPath(){
+        assertEquals(3, countDataBase());
 
         List<EmployeeDto> employeeDtos= employeeService.findAll();
 
-        assertEquals(employeeDtos.size(),countDataBase());
+        assertEquals(countDataBase(),employeeDtos.size());
 
         assertEquals("kareem",employeeDtos.stream().findFirst().get().getFirstName());
         assertEquals(3,employeeDtos.size());
@@ -131,10 +130,100 @@ public class EmployeeServiceTest {
         assertThrows(EmployeeNotFoundException.class ,()-> employeeService.updateEmployee( 3 ,  employeeDto));
     }
 
+    @Test
+    public void createEmployeeHappyPath(){
+        assertEquals(3,countDataBase());
+
+        EmployeeDto employeeDto = new EmployeeDto(0,"Tony" ,"Stark","ironman@stark.com");
+
+        employeeDto= employeeService.createEmployee(employeeDto);
+        assertNotNull(employeeDto);
+
+        assertFalse(employeeDto.getId()==0);
+
+        assertEquals(4,employeeDto.getId());
+        assertEquals("Tony",employeeDto.getFirstName());
+        assertEquals("Stark",employeeDto.getLastName());
+        assertEquals("ironman@stark.com",employeeDto.getEmail());
+
+        assertEquals(4,countDataBase());
+    }
+
+    @Test
+    public void createEmployeeWithNoId(){
+        assertEquals(3,countDataBase());
+
+        EmployeeDto employeeDto = new EmployeeDto("Tony" ,"Stark","ironman@stark.com");
+        assertEquals(0 ,employeeDto.getId());
+
+        employeeDto= employeeService.createEmployee(employeeDto);
+        assertNotNull(employeeDto);
+
+        assertFalse(employeeDto.getId()==0);
+
+        assertEquals(4,employeeDto.getId());
+        assertEquals("Tony",employeeDto.getFirstName());
+        assertEquals("Stark",employeeDto.getLastName());
+        assertEquals("ironman@stark.com",employeeDto.getEmail());
+
+        assertEquals(4,countDataBase());
+    }
+
+    @Test
+    public void createEmployeeWithExistingId(){
+        assertEquals(3,countDataBase());
+
+        EmployeeDto employeeDto = new EmployeeDto(2,"Tony" ,"Stark","ironman@stark.com");
+        assertEquals(2 ,employeeDto.getId());
+
+        employeeDto= employeeService.createEmployee(employeeDto);
+        assertNotNull(employeeDto);
+
+        assertFalse(employeeDto.getId()==0);
+
+        assertEquals(4,employeeDto.getId());
+        assertEquals("Tony",employeeDto.getFirstName());
+        assertEquals("Stark",employeeDto.getLastName());
+        assertEquals("ironman@stark.com",employeeDto.getEmail());
+
+        assertEquals(4,countDataBase());
+    }
+
+    @Test
+    public void createEmployeeWithExistingIdAndEmail(){
+        assertEquals(3,countDataBase());
+
+        assertThrows(EmployeeNotFoundException.class,
+                ()->employeeService.
+                        createEmployee(new EmployeeDto(2,"Tony" ,"Stark","kareem@gmail.com")));
+        assertEquals(3,countDataBase());
+    }
 
 
+    @Test
+    public void deleteEmployeeHappyPath(){
+        assertEquals(3,countDataBase());
 
+        long id =3;
+        EmployeeDto getEmployeeDto = employeeService.findEmployeeById(id);
+        assertEquals("nagy",getEmployeeDto.getFirstName());
+        assertEquals("galal",getEmployeeDto.getLastName());
+        assertEquals("nagy@outlook.com",getEmployeeDto.getEmail());
 
+        employeeService.deleteEmployee(3);
+        assertEquals(2,countDataBase());
+        assertThrows(EmployeeNotFoundException.class,()-> employeeService.findEmployeeById(id));
+
+    }
+
+    @Test
+    public void deleteEmployeeNotFoundId(){
+        assertEquals(3,countDataBase());
+
+        assertThrows(EmployeeNotFoundException.class,()-> employeeService.deleteEmployee(5));
+
+        assertEquals(3,countDataBase());
+    }
 
 
 
