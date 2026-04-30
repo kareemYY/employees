@@ -16,7 +16,7 @@ public class EmployeeDto {
 
 
     @NotBlank(message = "First name must be mandatory")
-    @Size(min = 2, max = 50,message = "firstName must be between 2 and 50 characters")
+    @Size(min = 2, max = 50,message = "FirstName must be between 2 and 50 characters")
     private String firstName;
 
 
