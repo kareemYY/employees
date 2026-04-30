@@ -56,7 +56,7 @@ public class EmployeeRestController {
     @PutMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeDto updateEmployee(@Parameter(description = "Id of employee")
-                                          @PathVariable @Min(value = 1) int employeeId,  @Valid @RequestBody EmployeeDto employeeDto ) {
+                                          @PathVariable int employeeId,  @Valid @RequestBody EmployeeDto employeeDto ) {
         return employeeService.updateEmployee(employeeId, employeeDto);
     }
 

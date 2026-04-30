@@ -304,7 +304,7 @@ public class EmployeeControllerTest {
 
     @Test
     @WithMockUser(roles = "MANAGER")
-    public void updateEmployeeWithEmployeeRoleHttpRequest()throws Exception{
+    public void updateEmployeeWithManagerRoleHttpRequest()throws Exception{
         EmployeeDto employeeDto= new EmployeeDto("steve" , "jobs" ,"jobs@icloud.com");
         mockMvc.perform(put("/api/employees/{id}",2)
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
@@ -329,6 +329,100 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.status",is(404)))
                 .andExpect(jsonPath("$.message",is("Employee not found with id 22")));
     }
+
+    @Test
+    @WithMockUser(roles = "MANAGER")
+    public void updateEmployeeExistingEmailHttpRequest() throws Exception {
+        EmployeeDto employeeDto = new EmployeeDto("steve", "jobs", "nagy@outlook.com");
+        mockMvc.perform(put("/api/employees/{id}", 2)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(employeeDto)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status",is(404)))
+                .andExpect(jsonPath("$.message",is("Can't update employee with exist email")));
+    }
+
+    @Test
+    @WithMockUser(roles = "MANAGER")
+    public void updateEmployeeCheckValidationHttpRequest() throws Exception {
+        EmployeeDto employeeDto = new EmployeeDto("s", "  ", "jobs@icloud.com");
+        mockMvc.perform(put("/api/employees/{id}", 2)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(employeeDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status",is(400)))
+                .andExpect(jsonPath("$.message")
+                        .value(containsString("FirstName must be between 2 and 50 characters")))
+                .andExpect(jsonPath("$.message")
+                        .value(containsString("Last name must be mandatory")));
+    }
+
+    @Test
+    @WithMockUser(roles = "EMPLOYEE")
+    public void updateEmployeeWithEmployeeRoleHttpRequest() throws  Exception{
+        EmployeeDto employeeDto = new EmployeeDto("steve", "jobs", "nagy@outlook.com");
+        mockMvc.perform(put("/api/employees/{id}",2)
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(employeeDto)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void updateEmployeeWithAdminRoleHttpRequest() throws  Exception{
+        EmployeeDto employeeDto = new EmployeeDto("steve", "jobs", "nagy@outlook.com");
+        mockMvc.perform(put("/api/employees/{id}",2)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(employeeDto)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void updateEmployeeWithNoRoleHttpRequest() throws  Exception{
+        EmployeeDto employeeDto = new EmployeeDto("steve", "jobs", "nagy@outlook.com");
+        mockMvc.perform(put("/api/employees/{id}",2)
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(employeeDto)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void deleteEmployeeWithAdminRoleHttpRequest() throws Exception{
+        mockMvc.perform(delete("/api/employees/{id}",3))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void deleteEmployeeAdminRoleNotFoundIdHttpRequest() throws Exception{
+        mockMvc.perform(delete("/api/employees/{id}",4))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser(roles = "EMPLOYEE")
+    public void deleteEmployeeWithEmployeeRoleHttpRequest() throws Exception{
+        mockMvc.perform(delete("/api/employees/{id}",3))
+                .andExpect(status().isForbidden());
+    }
+    @Test
+    @WithMockUser(roles = "MANAGER")
+    public void deleteEmployeeWithManagerRoleHttpRequest() throws Exception{
+        mockMvc.perform(delete("/api/employees/{id}",3))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void deleteEmployeeNoRoleHttpRequest() throws Exception{
+        mockMvc.perform(delete("/api/employees/{id}",3))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+
+
+
 
 
 
