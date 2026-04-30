@@ -136,7 +136,13 @@ src/main/java
 ├── exception
 └── dto
 ```
+## 📸 Project Screenshots
 
+### Swagger UI
+![Swagger](https://github.com/kareemYY/employees/issues/1#issue-4360226397)
+
+### H2 Console
+![H2](https://github.com/kareemYY/employees/issues/2#issue-4360238859)
 ---
 
 ## 🚀 Future Improvements
