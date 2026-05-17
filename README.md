@@ -1,160 +1,74 @@
-# 👨‍💼 Employee REST API
+# Employee REST API
 
-A Spring Boot RESTful API for managing employees with full CRUD operations, role-based security, validation, exception handling, Swagger documentation, and comprehensive integration testing.
-
----
-
-## 🚀 Features
-
-* Create, Read, Update, Delete (CRUD) operations
-* Role-based authorization using Spring Security
-* DTO mapping layer
-* Input validation using Bean Validation
-* Global exception handling
-* Swagger / OpenAPI documentation
-* H2 database integration
-* Service layer testing
-* Controller integration testing using MockMvc
-* Security authorization testing
+  A Spring Boot RESTful API for managing employees with full CRUD operations, role-based security, validation, exception handling, Swagger documentation, comprehensive integration testing, and deployment on AWS.
 
 ---
 
-## 🏗️ Tech Stack
+##  Features
 
-* Java
-* Spring Boot
-* Spring Data JPA
-* Hibernate
-* Spring Security
-* H2 Database
-* JUnit 5
-* MockMvc
-* Spring Boot Test
-* Swagger / OpenAPI
-* Maven
-
----
-
-## 📦 API Endpoints
-
-| Method | Endpoint            | Description         | Access Role |
-| ------ | ------------------- | ------------------- | ----------- |
-| GET    | /api/employees      | Get all employees   | EMPLOYEE    |
-| GET    | /api/employees/{id} | Get employee by ID  | EMPLOYEE    |
-| POST   | /api/employees      | Create new employee | MANAGER     |
-| PUT    | /api/employees/{id} | Update employee     | MANAGER     |
-| DELETE | /api/employees/{id} | Delete employee     | ADMIN       |
+  * Full CRUD operations for employee management
+  * Role-based authorization using Spring Security
+  * DTO mapping layer
+  * Input validation using Bean Validation
+  * Global exception handling
+  * Swagger / OpenAPI documentation
+  * H2 database integration
+  * Service layer testing
+  * Controller integration testing using MockMvc
+  * Security authorization testing
+  * Deployment on AWS Elastic Beanstalk
+  * Amazon RDS database integration
 
 ---
 
-## 🔐 Security
+## Tech Stack
+  
+  * Java
+  * Spring Boot
+  * Spring Data JPA
+  * Hibernate
+  * Spring Security
+  * H2 Database
+  * JUnit 5
+  * MockMvc
+  * Spring Boot Test
+  * Swagger / OpenAPI
+  * Maven
+  * Amazon Web Services (EC2, Elastic Beanstalk, RDS, Systems Manager Parameter Store, IAM)
 
-This project uses Spring Security with role-based authorization.
+---
+
+##  API Endpoints Documentation
+  - @GET("/api/employees") =====================> Get all employees
+  - @GET("/api/employees/{employeeId}") ========> Get one employee by id
+  - @PUT("/api/employees/{employeeId}") ========> Update data for one employee by id
+  - @POST("/api/employees") ====================> Adding new employee to database
+  - @DELETE("/api/employees/{employeeId}") =====> Deleting employee by id
+     
+---
 
 ### Roles
 
-* EMPLOYEE → Read operations
-* MANAGER → Create & Update operations
-* ADMIN → Delete operations
+  - EMPLOYEE ======> Read-only data ( GET method )
+  - MANAGER =======> Create & Update employee ( POST & PUT  method)
+  - ADMIN =========> Full access
 
 ---
 
-## 🧪 Testing
+##  Testing
 
-The project includes comprehensive integration and service testing covering:
-
-* CRUD operations
-* Validation rules
-* Exception handling
-* Security authorization
-* Controller endpoint testing
-* Database validation
-
-Tests use:
-
-* Spring Boot Test
-* MockMvc
-* H2 Database
-* JUnit 5
-
+Testing covering:
+  - CRUD operations
+  - Validation rules
+  - Exception handling
+  - Security authorization
+  - Controller endpoint testing
+  - Database validation
+ 
 ---
 
-## ⚙️ Running the Project
+## Live Demo
+  Application deployed on AWS Elastic Beanstalk:
+  -- http://employees-restapi.us-east-1.elasticbeanstalk.com/ --
 
-```bash
-mvn spring-boot:run
-```
-
-Application runs at:
-
-```text
-http://localhost:8080
-```
-
----
-
-## 📘 Swagger Documentation
-
-Swagger UI is available at:
-
-```text
-http://localhost:8080/docs
-```
-
----
-
-## 🗄️ Database
-
-This project uses H2 Database.
-
-### H2 Console
-
-```text
-http://localhost:8080/h2-console
-```
-
-### Default Credentials
-
-| Property | Value    |
-| -------- | -------- |
-| Username | sa       |
-| Password | password |
-
----
-
-## 📂 Project Structure
-
-```text
-src/main/java
-│
-├── controller
-├── service
-├── employeeDao
-├── entity
-├── mapper
-├── security
-├── exception
-└── dto
-```
-## 📸 Project Screenshots
-
-### Swagger UI
-![Swagger](https://github.com/kareemYY/employees/issues/1#issue-4360226397)
-
-### H2 Console
-![H2](https://github.com/kareemYY/employees/issues/2#issue-4360238859)
----
-
-## 🚀 Future Improvements
-
-* Pagination
-* Search API
-* Docker Support
-* API Response Wrapper
-* Audit Fields
-
----
-
-## 👨‍💻 Author
-
-Kareem Yasser
+  
