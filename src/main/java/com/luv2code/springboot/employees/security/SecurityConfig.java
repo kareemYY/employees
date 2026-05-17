@@ -22,7 +22,7 @@ public class SecurityConfig {
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
 
-        jdbcUserDetailsManager.setUsersByUsernameQuery("select user_id ,password ,active from system_users where user_id=?");
+        jdbcUserDetailsManager.setUsersByUsernameQuery("select user_id ,pw ,active from members where user_id=?");
 
 
         jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("select user_id ,role from roles where user_id=?");
@@ -37,7 +37,7 @@ public class SecurityConfig {
                 configurer
                         .requestMatchers(HttpMethod.GET,"/h2-console/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/h2-console/**").permitAll()
-                        .requestMatchers("/docs/**","/swagger-ui/**","/v3/api-docs/**","/swagger-ui.html").permitAll()
+                        .requestMatchers("/","/docs/**","/swagger-ui/**","/v3/api-docs/**","/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/employees").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.GET,"/api/employees/**").hasRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.POST,"/api/employees").hasRole("MANAGER")
