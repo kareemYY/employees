@@ -39,18 +39,18 @@
 ---
 
 ##  API Endpoints Documentation
-  - @GET("/api/employees") =====================> Get all employees
+  - @GET("/api/employees") =========================> Get all employees
   - @GET("/api/employees/{employeeId}") ========> Get one employee by id
   - @PUT("/api/employees/{employeeId}") ========> Update data for one employee by id
-  - @POST("/api/employees") ====================> Adding new employee to database
-  - @DELETE("/api/employees/{employeeId}") =====> Deleting employee by id
+  - @POST("/api/employees") ========================> Adding new employee to database
+  - @DELETE("/api/employees/{employeeId}") =========> Deleting employee by id
      
 ---
 
 ### Roles
 
   - EMPLOYEE ======> Read-only data ( GET method )
-  - MANAGER =======> Create & Update employee ( POST & PUT  method)
+  - MANAGER ======> Create & Update employee ( POST & PUT  method)
   - ADMIN =========> Full access
 
 ---
